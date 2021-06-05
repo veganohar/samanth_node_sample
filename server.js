@@ -2,13 +2,13 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const bodyparser = require("body-parser");
-const mongoose = require("mongoose");
-
+const db = require("./app/models");
+const dbconfig = require("./app/config/db.config");
 
 app.use(bodyparser.json());
 
 
-mongoose.connect('mongodb://localhost/my_database', {
+db.mongoose.connect(`mongodb://${dbconfig.HOST}:${dbconfig.PORT}/${dbconfig.DB}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -28,17 +28,5 @@ app.listen(port,()=>{
     console.log("Server running");
 }) 
 
-app.post("/dataBody",(req,res)=>{
-    console.log(req.body);
-    res.send(req.body);
-})
-
-app.post("/dataParams/:name/:age",(req,res)=>{
-    console.log(req.params);
-    res.send(req.params);
-})
-
-app.post("/dataQuery",(req,res)=>{
-    console.log(req.query);
-    res.send(req.query);
-})
+require("./app/routes/test.route")(app);
+require("./app/routes/student.route")(app);
